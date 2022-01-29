@@ -38,8 +38,6 @@ def echolove_bot(token):
 
         markup.add(item1, item2)
         bot.send_message(message.chat.id,'Тыкни для любви:',reply_markup=markup)
-
-        send_love(chat)
     
     # Обработчик текста
     @bot.message_handler(content_types=['text'])
@@ -56,12 +54,6 @@ def echolove_bot(token):
                 bot.send_message(message.chat.id, "B160")
             elif message.text == "chat":
                 bot.send_message(message.chat.id, message.chat.id)
-    
-    def send_love(chat_id):
-        while True:
-            bot.send_message(chat_id,love.loveText())
-            print("Отправил уведомление | " + str(datetime.now()))
-            time.sleep(86400)
     
     def save_text(message):
         file = "/home/admin/bot/loveText.txt"
