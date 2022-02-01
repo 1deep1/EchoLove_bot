@@ -6,7 +6,7 @@ from random import choice
 
 
 def loveText():
-    file = "/home/admin/bot/loveText.txt"
+    file = "/home/admin/echoBot/loveText.txt"
     with open(file, encoding='utf-8') as f:
         content = f.readlines()
     content = [x.strip() for x in content]
@@ -15,8 +15,8 @@ def loveText():
     return out
 
 def lovePhoto(message, bot):
-    files = os.listdir('/home/admin/bot/pic/')
-    link = "/home/admin/bot/pic/out" + str(random.randrange(0, len(files), 1)) + ".jpg"
+    files = os.listdir('/home/admin/echoBot/pic/')
+    link = "/home/admin/echoBot/pic/out" + str(random.randrange(0, len(files), 1)) + ".jpg"
     img = open(link, 'rb')
     bot.send_photo(message.chat.id, img)
     img.close()

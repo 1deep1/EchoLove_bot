@@ -1,3 +1,4 @@
+from random import choice
 import telebot
 from telebot import types
 import urllib
@@ -35,8 +36,9 @@ def echolove_bot(token):
 
         item1=types.KeyboardButton("Как сильно ты меня любишь?")
         item2=types.KeyboardButton("Мяшную пикчу, пожалуйста")
+        item3=types.KeyboardButton("МЕГА любовь")
 
-        markup.add(item1, item2)
+        markup.add(item1, item2, item3)
         bot.send_message(message.chat.id,'Тыкни для любви:',reply_markup=markup)
     
     # Обработчик текста
@@ -47,29 +49,54 @@ def echolove_bot(token):
                 bot.send_message(message.chat.id,love.loveText())
             elif message.text == "Мяшную пикчу, пожалуйста":
                 love.lovePhoto(message, bot)
+            elif message.text == "МЕГА любовь":
+                sent = bot.send_message(message.chat.id, 'Введи силу любви (от 1 до 4000):')
+                bot.register_next_step_handler(sent, mega)
             elif message.text == 'любовь':
                 sent = bot.send_message(message.chat.id, 'Введи фразу:')
                 bot.register_next_step_handler(sent, save_text)
-            elif message.text == "пароль":
-                bot.send_message(message.chat.id, "B160")
             elif message.text == "chat":
                 bot.send_message(message.chat.id, message.chat.id)
     
     def save_text(message):
-        file = "/home/admin/bot/loveText.txt"
+        file = "/home/admin/echoBot/loveText.txt"
         with open(file, 'a', encoding='utf-8') as f:
             f.write('\n' + message.text)
         bot.reply_to(message, "Пожалуй, я сохраню это во имя нашей любви")
+
+    def mega(message):
+        err = "Прости, видимо ты ввела не то значение(("
+        out = ""
+        if message.text.isdigit():
+            if int(message.text) > 0 and int(message.text) < 4001:
+                file = "/home/admin/echoBot/loveText.txt"
+                with open(file, encoding='utf-8') as f:
+                    content = f.readlines()
+                content = [x.strip() for x in content]
+                text = choice(content)
+
+                
+                for x in range(int(message.text)):
+                    out += text + "\n"
+                if len(out) > 4095:
+                    for x in range(0, len(out), 4095):
+                        bot.reply_to(message, text=out[x:x+4095])
+                else:
+                    bot.reply_to(message, text=out)
+            else:
+                bot.reply_to(message, err)
+        else:
+            bot.reply_to(message, err)
     
     # Обработчик файлов
     @bot.message_handler(content_types=['document'])
     def handle_docs_photo(message):
         try:
-            files = os.listdir('/home/admin/bot/pic/')
+            files = os.listdir('/home/admin/echoBot/pic/')
             file_info = bot.get_file(message.document.file_id)
             downloaded_file = bot.download_file(file_info.file_path)
 
-            src = '/home/admin/bot/pic/out' + str(len(files)) + '.jpg'
+            src = '/home/admin/echoBot/pic/out' + str(len(files)) + '.jpg'
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
 
@@ -81,11 +108,11 @@ def echolove_bot(token):
     @bot.message_handler(content_types=['photo'])
     def handle_docs_photo(message):
         try:
-            files = os.listdir('/home/admin/bot/pic/')
+            files = os.listdir('/home/admin/echoBot/pic/')
             file_info = bot.get_file(message.photo[0].file_id)
             downloaded_file = bot.download_file(file_info.file_path)
 
-            src = '/home/admin/bot/pic/out' + str(len(files)) + '.jpg'
+            src = '/home/admin/echoBot/pic/out' + str(len(files)) + '.jpg'
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
 

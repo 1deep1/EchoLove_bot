@@ -1,1 +1,1 @@
-token = "#"
+token = "5006378077:AAEAK2B4y45Ww240vuVLNqOeMQOm1QYPeAs"
